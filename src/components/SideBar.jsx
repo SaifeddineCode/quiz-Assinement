@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 
-const SideBar = () => {
 
-  const [filterData,setFilterData] = useState({
-    postCode :"",
-    registrationStatus:[],
-    startDate:"",
-    endDate:"",
-    vendorType:[],
-    ServiceOffering:[]
-  })
+const SideBar = ({filterData,setFilterData,data,setFinalResut,setCurrentPage}) => {
+
+  // const [filterData,setFilterData] = useState({
+  //   postCode :"",
+  //   registrationStatus:[],
+  //   startDate:"",
+  //   endDate:"",
+  //   vendorType:[],
+  //   ServiceOffering:[]
+  // })
 
   // const [selected, setSelected] = useState([]);
 
@@ -60,9 +61,9 @@ const handleServiceOfferingChange = (e) => {
 
     setFilterData((prev) => ({
       ...prev,
-      ServiceOffering: checked
-        ? [...prev.ServiceOffering, value]          // add if checked
-        : prev.ServiceOffering.filter((s) => s !== value) // remove if unchecked
+      serviceOffering: checked
+        ? [...prev.serviceOffering, value]          // add if checked
+        : prev.serviceOffering.filter((s) => s !== value) // remove if unchecked
     }));
 };
 
@@ -70,12 +71,61 @@ const handleServiceOfferingChange = (e) => {
     console.log(filterData)
   },[filterData])
 
+const handleFilter = () => {
+
+  let result = [...data];
+
+  // Filter by postcode
+  if (filterData.postCode) {
+    result = result.filter((item) =>
+      item.postcode.toLowerCase().includes(filterData.postCode.toLowerCase())
+    );
+  }
+
+  // Filter by registration status (Onboarded / Rejected)
+  if (filterData.registrationStatus.length > 0) {
+    result = result.filter((item) =>
+      filterData.registrationStatus.includes(item.status)
+    );
+  }
+
+  // Filter by date range
+  if (filterData.startDate) {
+    result = result.filter(
+      (item) => new Date(item.signupDate) >= new Date(filterData.startDate)
+    );
+  }
+  if (filterData.endDate) {
+    result = result.filter(
+      (item) => new Date(item.signupDate) <= new Date(filterData.endDate)
+    );
+  }
+
+  // Filter by vendor type (Independent / Company)
+  if (filterData.vendorType.length > 0) {
+    result = result.filter((item) =>
+      filterData.vendorType.includes(item.vendorType)
+    );
+  }
+
+  // Filter by service offering (HouseKeeping / Window Cleaning / Car Valet)
+  if (filterData.serviceOffering.length > 0) {
+    result = result.filter((item) =>
+      filterData.serviceOffering.includes(item.serviceOffering)
+    );
+  }
+
+  setFinalResut(result);
+  setCurrentPage(1)
+};
+
   return (
     <div className='flex flex-col gap-10 p-5 bg-[#F4F7F9] max-w-[25%]'>
         {/* logo & title */}
-        <div className='flex items-end ' >
-            <img src="/gler.svg" />
-            <h4 className='text-[#1A78F2] font-medium '>Admin Panel</h4>
+       
+        <div className='flex items-end '>
+          <img src="/gler.svg" />
+          <h4 className='text-[#1A78F2] font-medium '>Admin Panel</h4>
         </div>
         <div className='bg-[#D3D8DD] text-black font-bold rounded-lg px-3 py-2' >User Management</div>
         {/* post code */}
@@ -177,6 +227,7 @@ const handleServiceOfferingChange = (e) => {
         {/* Button filter */}
         <div className='text-center'>
           <button
+          onClick={()=>handleFilter()}
           className='text-white text-center shadow-sm bg-[#1A78F2] py-2 px-5 rounded-3xl '
           >
             Filter
