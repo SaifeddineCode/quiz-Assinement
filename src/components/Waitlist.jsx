@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { MdOutlineModeEdit } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
+import { GoFilter } from "react-icons/go";
 
 
 
-const Waitlist = ({setIsOpen,filtredData,data,finalResult,currentPage,setCurrentPage}) => {
+
+const Waitlist = ({setIsOpen,filtredData,data,finalResult,currentPage,setCurrentPage,setSideBarIsOpen}) => {
 
   const [activeTab,setActiveTab] = useState("Service Providers")
 
-
+const [searchQuery,setSearchQuery] = useState("")
 
   // dummy Data , until we get real data from an api
 
@@ -84,15 +86,22 @@ const totalPages = Math.ceil(finalResult.length / itemsPerPage);
 
 
 useEffect(()=>{
-  console.log(finalResult)
-},[finalResult])
+  console.log(searchQuery)
+},[searchQuery])
 
 
   return (
-    <div className='flex flex-col gap-5 flex-1 min-w-0'>
+    <div className='flex flex-col gap-5 w-full md:flex-1 min-w-0'>
       {/* Header of wailtlist component */}
-      <h3 className='text-3xl text-black mb-3'> Wailtlist</h3>
-      <div className='flex justify-between'>
+      <div className='flex justify-between items-center' >
+        <h3 className='text-3xl text-black mb-3'> Wailtlist</h3>
+        {/* Button filter */}
+        <button 
+        className='sm:hidden'
+        onClick={()=>setSideBarIsOpen((prev)=> !prev)}
+        > <GoFilter size={25} /></button>
+      </div>
+      <div className='flex flex-col sm:flex-row gap-3 justify-between'>
         {/* Tab */}
         <div className='flex gap-2'>
           <button
@@ -106,13 +115,16 @@ useEffect(()=>{
           >Customers</button>
         </div>
         {/* Search input */}
-        <div className='relative'>
-          <input 
+        <div className=''>
+         <span className='relative'>
+           <input 
+            onChange={(e)=>setSearchQuery(e.target.value)}
             className='border-[#D3D8DD] text-sm text-[#88939D] font-medium py-1 px-3 border'
             type='text' placeholder='Search User' />
             <button className='absolute right-0 border-[#D3D8DD] border-l px-1 py-[6px]' >
               <CiSearch />
             </button>
+         </span>
         </div>
       </div>
       {/* table */}
@@ -129,13 +141,13 @@ useEffect(()=>{
                 <input type='checkbox' />
               </th>
               <th className='p-3 w-37.5 text-left'>Email</th>
-              <th className='p-3 w-37.5'>Phone Number</th>
-              <th className='p-3 w-37.5'>Postcode</th>
-              <th className='p-3 w-37.5'>Vendor Type</th>
-              <th className='p-3 w-37.5'>Service Offering</th>
-              <th className='p-3 w-37.5'>Signup Date</th>
-              <th className='p-3 w-37.5'>Status</th>
-              <th className='p-3 w-37.5'>Actions</th>
+              <th className='p-3 w-37.5 text-left'>Phone Number</th>
+              <th className='p-3 w-37.5 text-left'>Postcode</th>
+              <th className='p-3 w-37.5 text-left'>Vendor Type</th>
+              <th className='p-3 w-37.5 text-left'>Service Offering</th>
+              <th className='p-3 w-37.5 text-left'>Signup Date</th>
+              <th className='p-3 w-37.5 text-left'>Status</th>
+              <th className='p-3 w-37.5 text-left'>Actions</th>
             </tr>
           </thead>
           {finalResult.length === 0 ? 
@@ -146,9 +158,9 @@ useEffect(()=>{
             {/* <tr>
               <td>test@example.com</td>
             </tr> */}
-            {currentData.map((row)=>{
+            {currentData.map((row,index)=>{
               return (
-                 <tr className={`${row.id % 2 == 0 ? "bg-[#EAEEF3]" :"bg-white "}`} key={row.id}>
+                 <tr className={`${index % 2 === 0 ? "bg-[#EAEEF3]" :"bg-white "}`} key={row.id}>
                     <td className='p-3 text-sm text-left text-[#2B3641]'>
                       <input type='checkbox' />
                     </td>
@@ -172,7 +184,7 @@ useEffect(()=>{
           </tbody>}
         </table> }
       </div>
-      <div className="flex items-center justify-between mt-4 px-2">
+      <div className="flex flex-col sm:flex-row gap-3 items-center justify-between mt-4 px-2">
         {/* Info */}
         <p className="text-sm text-gray-500">
           Showing {indexOfFirst + 1}–{Math.min(indexOfLast, finalResult.length)} of {finalResult.length} results

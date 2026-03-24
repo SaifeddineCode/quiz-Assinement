@@ -9,6 +9,19 @@ function App() {
 
   const [isOpen,setIsOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterData,setFilterData] = useState({
+      postCode :"",
+      registrationStatus:[],
+      startDate:"",
+      endDate:"",
+      vendorType:[],
+      serviceOffering:[]
+    })
+
+ 
+
+ const [sideBarIsOpen,setSideBarIsOpen] = useState(false)
+
    const data = [
   { id: 1, email: "john.doe@example.com", phoneNumber: "+1 (555) 123-4567", postcode: "10001", vendorType: "Independent", serviceOffering: "HouseKeeping", signupDate: "2024-01-15", status: "Onboarded" },
   { id: 2, email: "jane.smith@gmail.com", phoneNumber: "+1 (555) 987-6543", postcode: "90210", vendorType: "Company", serviceOffering: "Window Cleaning", signupDate: "2024-02-20", status: "Rejected" },
@@ -61,21 +74,12 @@ function App() {
   { id: 49, email: "grayson.cooper@autoshine.com", phoneNumber: "+1 (404) 345-6781", postcode: "30301", vendorType: "Company", serviceOffering: "HouseKeeping", signupDate: "2025-07-22", status: "Onboarded" },
   { id: 50, email: "stella.ward@papercraft.com", phoneNumber: "+39 320 1234567", postcode: "10121", vendorType: "Independent", serviceOffering: "Window Cleaning", signupDate: "2025-08-01", status: "Rejected" },
 ];
-
-  const [filterData,setFilterData] = useState({
-      postCode :"",
-      registrationStatus:[],
-      startDate:"",
-      endDate:"",
-      vendorType:[],
-      serviceOffering:[]
-    })
-
- const [finalResult,setFinalResut] = useState(data)   
+const [finalResult,setFinalResut] = useState(data)  
+   
   return (
-    <main className='flex gap-5'>
-      <SideBar filterData={filterData} setFilterData={setFilterData} setFinalResut={setFinalResut} data={data} setCurrentPage ={setCurrentPage}  />
-      <Waitlist setIsOpen={setIsOpen} data={data} finalResult={finalResult} currentPage={currentPage} setCurrentPage ={setCurrentPage} />
+    <main className='flex gap-5 p-3'>
+      <SideBar sideBarIsOpen={sideBarIsOpen} filterData={filterData} setFilterData={setFilterData} setFinalResut={setFinalResut} data={data} setCurrentPage ={setCurrentPage}  />
+      <Waitlist setSideBarIsOpen={setSideBarIsOpen} setIsOpen={setIsOpen} data={data} finalResult={finalResult} currentPage={currentPage} setCurrentPage ={setCurrentPage} />
       {/* this model show just a static data until we get 
       real data from an api so we can fetch a specefic service provider from the table (db) */}
       <ServiceProdiversDetails setIsOpen={setIsOpen} isOpen={isOpen}   />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 
-const SideBar = ({filterData,setFilterData,data,setFinalResut,setCurrentPage}) => {
+const SideBar = ({filterData,setFilterData,data,setFinalResut,setCurrentPage,sideBarIsOpen}) => {
 
   // const [filterData,setFilterData] = useState({
   //   postCode :"",
@@ -34,6 +34,9 @@ const SideBar = ({filterData,setFilterData,data,setFinalResut,setCurrentPage}) =
   //   }))
   
   // }
+
+
+
 const handleStatusChange = (e) => {
     const { value, checked } = e.target;
 
@@ -68,8 +71,8 @@ const handleServiceOfferingChange = (e) => {
 };
 
   useEffect(()=>{
-    console.log(filterData)
-  },[filterData])
+    console.log(sideBarIsOpen)
+  },[sideBarIsOpen])
 
 const handleFilter = () => {
 
@@ -120,7 +123,7 @@ const handleFilter = () => {
 };
 
   return (
-    <div className='flex flex-col gap-10 p-5 bg-[#F4F7F9] max-w-[25%]'>
+    <div className={` ${sideBarIsOpen ? "flex" : "fixed top-0 left-[100%]" } sm:h-auto sm:overflow-none h-screen overflow-y-auto fixed top-0 left-0 sm:static sm:flex max-w-[70%] md:max-w-[25%] z-50 transition-all duration-300 ease-in-out    flex-col gap-10 p-5 bg-[#F4F7F9]  `}>
         {/* logo & title */}
        
         <div className='flex items-end '>
